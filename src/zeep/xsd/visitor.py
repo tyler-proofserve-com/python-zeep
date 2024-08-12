@@ -420,6 +420,12 @@ class SchemaVisitor:
 
         nillable = node.get("nillable") == "true"
         default = node.get("default")
+        in_substitution_group = qname_attr(node, 'substitutionGroup')
+        if in_substitution_group is not None:
+            self.schema.add_substitution_group_member(
+                in_substitution_group, qname)
+        is_substitution_group = (
+            self.schema.get_substitution_group(qname) is not None)
         element = xsd_elements.Element(
             name=qname,
             type_=xsd_type,
@@ -427,6 +433,7 @@ class SchemaVisitor:
             max_occurs=max_occurs,
             nillable=nillable,
             default=default,
+            is_substitution_group=is_substitution_group,
             is_global=is_global,
         )
 
